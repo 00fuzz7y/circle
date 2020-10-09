@@ -1,5 +1,5 @@
 """this is the mage module, which contains the classes and associated transformations
-    shown
+    shown in discord
 """
 
 
