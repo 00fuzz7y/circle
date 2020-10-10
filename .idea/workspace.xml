@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="e87cd007-e3b1-4498-9629-5d72c07eb33f" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1ieIDmRbXuWZJQJw3kqygfQo9iW" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\TEST09\Documents\circle\circle" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="kivygui" type="PythonConfigurationType" factoryName="Python">
+      <module name="circle" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Program Files\Python37\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/kivytest.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e87cd007-e3b1-4498-9629-5d72c07eb33f" name="Default Changelist" comment="" />
+      <created>1602261513598</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1602261513598</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="137" y="39" width="1092" height="714" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1602273294357">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="137" y="39" width="1092" height="714" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.768@0.0.1366.768" timestamp="1602273294357" />
+    <state x="402" y="189" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1602277206048">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="402" y="189" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1366.768@0.0.1366.768" timestamp="1602277206048" />
+    <state x="88" y="255" key="#com.intellij.ide.actions.ChooseComponentsToExportDialog" timestamp="1602280648997">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="88" y="255" key="#com.intellij.ide.actions.ChooseComponentsToExportDialog/0.0.1366.768@0.0.1366.768" timestamp="1602280648997" />
+    <state x="463" y="151" key="FileChooserDialogImpl" timestamp="1602280642076">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="463" y="151" key="FileChooserDialogImpl/0.0.1366.768@0.0.1366.768" timestamp="1602280642076" />
+    <state width="325" height="654" key="GridCell.Tab.0.bottom" timestamp="1602351684208">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state width="325" height="654" key="GridCell.Tab.0.bottom/0.0.1366.768@0.0.1366.768" timestamp="1602351684208" />
+    <state width="325" height="654" key="GridCell.Tab.0.center" timestamp="1602351684207">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state width="325" height="654" key="GridCell.Tab.0.center/0.0.1366.768@0.0.1366.768" timestamp="1602351684207" />
+    <state width="325" height="654" key="GridCell.Tab.0.left" timestamp="1602351684207">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state width="325" height="654" key="GridCell.Tab.0.left/0.0.1366.768@0.0.1366.768" timestamp="1602351684207" />
+    <state width="325" height="654" key="GridCell.Tab.0.right" timestamp="1602351684207">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state width="325" height="654" key="GridCell.Tab.0.right/0.0.1366.768@0.0.1366.768" timestamp="1602351684207" />
+    <state x="123" y="136" width="1382" height="776" key="dock-window-1" timestamp="1602273062804">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="123" y="136" width="1382" height="776" key="dock-window-1/0.0.1366.768@0.0.1366.768" timestamp="1602273062804" />
+  </component>
+</project>

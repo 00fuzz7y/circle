@@ -1,0 +1,29 @@
+<MyGrid>
+
+    name:name
+    dob:dob
+
+    GridLayout:
+        cols: 1
+        size: root.width, root.height
+
+        GridLayout:
+            cols:2
+
+            Label:
+                text: 'eat? '
+
+            TextInput:
+                id:name
+                multiline: False
+
+            Label:
+                text: 'DOB: '
+
+            TextInput:
+                id:dob
+                multiline: False
+
+        Button:
+            text: 'submit!!?'
+            on_press: root.btn()

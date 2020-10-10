@@ -10,12 +10,18 @@ this is going to be the UI once i can get the backend running
 
 import kivy
 from kivy.app import App
-from kivy.uix.label import Label
+from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.textinput import TextInput
 
-class MyApp(App):
+
+class Test(App):
+
     def build(self):
-        return Label(text="Fucking idiot-something worked. thank the gods")
+        return FloatLayout()
 
-if __name__== "__main__":
-    MyApp().run()
+
+
+if __name__ == "__main__":
+    print('yo mamma')
+    Test().run()
 

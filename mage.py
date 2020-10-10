@@ -297,6 +297,8 @@ def create():
     abilities.update(skills)
     abilities.update(knowledges)
 
+    # we still need advantages, to finalise and spend FP, derive first stats
+
     return attributes, abilities
 
 
