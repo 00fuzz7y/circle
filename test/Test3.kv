@@ -1,0 +1,14 @@
+<Button>:
+    font_size:20
+    color: 0, 0, 0.4, 1
+    size_hint: 0.3, 0.5
+
+<FloatLayout>:
+    Button:
+        id: sug
+        pos_hint: {"x":0.5, "top":1}
+        text: "Do summat " if sug.state == "normal" else "to me"
+    Button:
+        id: btn
+        pos_hint: {"y":0.3}
+        text: "and enjoy it?" if btn.state == "normal" else "Down"

@@ -10,13 +10,13 @@ this is going to be the UI once i can get the backend running
 
 import kivy
 from kivy.app import App
-from kivy.uix.widget import Widget
+from kivy.uix.floatlayout import FloatLayout
 
 
 class Test(App):
 
     def build(self):
-        return Widget()
+        return FloatLayout()
 
 
 if __name__ == "__main__":
