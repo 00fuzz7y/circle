@@ -23,7 +23,11 @@ class CreateAccountWindow(Screen):
     password = ObjectProperty(None)
 
     def submit(self):
-        if self.namae.text != "" and self.email.text != "" and self.email.text.count("@") == 1 and self.email.text.count(".") > 0:
+        print(self.namae.text)
+        print(self.email.text)
+        print(self.password.text)
+        if self.namae.text != "" and self.email.text != "" and \
+                self.email.text.count("@") == 1 and self.email.text.count(".") > 0:
             if self.password != "":
                 db.add_user(self.email.text, self.password.text, self.namae.text)
 
@@ -106,7 +110,7 @@ kv = Builder.load_file("test.kv")
 sm = WindowManager()
 db = Bag("users.txt")
 
-screens = [LoginWindow(name="login"), CreateAccountWindow(name="create"),MainWindow(name="main")]
+screens = [LoginWindow(name="login"), CreateAccountWindow(name="create"), MainWindow(name="main")]
 for screen in screens:
     sm.add_widget(screen)
 

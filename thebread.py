@@ -3,7 +3,7 @@ import mage as m
 """this is to be the main program, which is why mage is being called here"""
 
 
-def choose(selections, allowed=4):
+def choose(selections, attempts=4):
     # first we print the options with the index to use as a selector
     # counter doin double duty
     i = 0
@@ -32,7 +32,7 @@ def choose(selections, allowed=4):
             print('-HIT the little red button!')
             from sys import exit as littleredbutton
             littleredbutton()
-        elif attempt < allowed:
+        elif attempt < attempts:
             print("you ain't even in the same book. try again.")
             attempt += 1
             continue
