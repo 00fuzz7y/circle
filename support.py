@@ -4,6 +4,7 @@ designed to ease the experience of GMing
         sessions
         characters
         scenes
+        moment
     -handling the aforementioned through template interface Element functions;
       create()
       read()

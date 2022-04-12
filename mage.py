@@ -72,6 +72,25 @@ class Mage:
     def set(self, attribute, value): self.__setattr__(attribute, value)
     def get(self, attribute): return self.__getattribute__(attribute)
 
+def setgrouptovalue(g, v):
+    counter = 1
+    for a in g:
+        temp = g.__getitem__(a)
+        temp.__setattr__('value', v)
+        temp.__setattr__('ordinance', counter)
+        counter = counter + 1
+
+
+def setgrouptotuple(g, t):
+    counter = 0
+    for a in g:
+        temp = g.__getitem__(a)
+        temp.__setattr__('value', t[counter])
+        counter = counter + 1
+
+
+def getvaluesfor(g):
+    pass
 
 def choose(selections, allowed=4):
     # first we print the options with the index to use as a selector
@@ -95,9 +114,11 @@ def choose(selections, allowed=4):
             choice = int(choice)
             if choice < 0:
                 print('that choice is too small!')
+                attempt += 1
                 continue
             elif choice >= len(selections):
                 print('that choice is too big!')
+                attempt += 1
                 continue
             else:
                 print('your choice is ' + str(choice), end=" ")
@@ -132,49 +153,11 @@ def globalname(xx):
     for objname, oid in globals().items():
         if oid is xx:
             return objname
-
-
-def test():
-    """ a = (4, 1, 3, 5, 6, 7, 4, 2, 1)
-    setgrouptotuple(attributes, a) """
-    print('cool')
-    thing = Skill(name='thing', description='does stuff', value=0, actions=['move', 'eat shit'])
-    print(thing.name, thing.description, thing.basevalue, thing, thing.specialties, thing.expectedattributes)
-    tempoGary = []
-
-    strength = Attribute('strength', 'the power to move boulders around')
-    tempoGary.append(strength)
-    gary = Mage(name='gary', stats=tempoGary)
-    print(gary.__getattribute__('name'))
-
-    mage = create()
-    for g in mage:
-        for e in g.keys():
-            i = g.__getitem__(e)
-            print(i.__getattribute__('name'), end=':')
-            print(i.__getattribute__('value'))
-
-
-def setgrouptovalue(g, v):
-    counter = 1
-    for a in g:
-        temp = g.__getitem__(a)
-        temp.__setattr__('value', v)
-        temp.__setattr__('ordinance', counter)
-        counter = counter + 1
-
-
-def setgrouptotuple(g, t):
-    counter = 0
-    for a in g:
-        temp = g.__getitem__(a)
-        temp.__setattr__('value', t[counter])
-        counter = counter + 1
-
-
-def getvaluesfor(g):
+def check(input, acceptable_range):
     pass
+    # if input in acceptable_range: 0
 
+    # else give back points and give second attempt
 
 def allocate(points, group):
     print('now, we need to allocate the points among the attributes.')
@@ -188,6 +171,7 @@ def allocate(points, group):
         if temp.isdigit():
             temp = int(temp)
 # if we have the points to spend and we aren't going over 4,
+# # TODO: this needs range checking for height
             if temp <= points:
                 current.__setattr__('value', temp)
                 points = points - temp
@@ -302,6 +286,27 @@ def create():
     return attributes, abilities
 
 
+def test():
+    """ a = (4, 1, 3, 5, 6, 7, 4, 2, 1)
+    setgrouptotuple(attributes, a) """
+    print('cool')
+    thing = Skill(name='thing', description='does stuff', value=0, actions=['move', 'eat shit'])
+    print(thing.name, thing.description, thing.basevalue, thing, thing.specialties, thing.expectedattributes)
+    tempoGary = []
+
+    strength = Attribute('strength', 'the power to move boulders around')
+    tempoGary.append(strength)
+    gary = Mage(name='gary', stats=tempoGary)
+    print(gary.__getattribute__('name'))
+
+    mage = create()
+    for g in mage:
+        for e in g.keys():
+            i = g.__getitem__(e)
+            print(i.__getattribute__('name'), end=':')
+            print(i.__getattribute__('value'))
+
+
 if __name__ == '__main__':
     test()
     testattributes = (3, 4, 5, 1, 3, 1, 4, 3, 4)
@@ -311,7 +316,7 @@ if __name__ == '__main__':
     testspheres = {'matter': 4, 'mind': 2}
     tradition = 'sonsofaether'
     traditionsphere = 'matter'
-
+"""
     # now we need a way to turn these statistics into useful values-rolls
     moves =
     movement =
@@ -320,3 +325,4 @@ if __name__ == '__main__':
     jumpheight =
     jumplength =
     jump = (jumpheight, jumplength)
+"""
