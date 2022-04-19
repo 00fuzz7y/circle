@@ -1,4 +1,4 @@
-import datetime
+import datetime, pickle
 
 
 class Bag:
@@ -44,6 +44,25 @@ class Bag:
             for user in self.users:
                 f.write(user + ";" + self.users[user][0] + ";" + self.users[user][1] + ";" + self.users[user][2] + "\n")
 
+
+
     @staticmethod
     def get_date():
         return str(datetime.datetime.now()).split(" ")[0]
+
+    def bagit(o, filename='bag'):
+        here = filename
+        heret = str(filename + '.txt')
+        with open(here, 'wb') as f:
+            with open(heret, 'w') as tf:
+                for e in meeji:
+                    for y, z in e.items():
+                        tf.write(y+ ';')
+                        pickle.dump(z,f)
+
+    def bagitin(o):
+        fn = input("a name for your bag:")
+        bagit(o, fn)
+
+if '__name__'== '__main__':
+    fn = input("a name for your bag:")

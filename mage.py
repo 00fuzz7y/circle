@@ -32,7 +32,8 @@ class Attribute(Stat):
 
 
 class Ability(Stat):
-    expectedattributes = ['name', 'description', 'basevalue', 'value', 'specialties']
+    expectedattributes = ['name', 'description', 'basevalue', 'value',
+                            'specialties', 'unskilled modifier']
     basevalue = 0
 
     def __init__(self, name, description, **kwargs):
@@ -42,22 +43,27 @@ class Ability(Stat):
 
 
 class Skill(Ability):
-    expectedattributes = ['name', 'description', 'basevalue', 'value']
+    expectedattributes = ['name', 'description', 'basevalue', 'value',
+                            'specialities', 'unskilled modifier']
+    unskilled_modifier = -1
 
     def __init__(self, name, description, **kwargs):
         super(Skill, self).__init__(name, description, **kwargs)
 
 
 class Talent(Ability):
-    expectedattributes = ['name', 'description', 'basevalue', 'value', 'specialties']
+    expectedattributes = ['name', 'description', 'basevalue', 'value',
+                            'specialties', 'unskilled modifier']
+    unskilled_modifier = -1
 
     def __init__(self, name, description, **kwargs):
         super(Talent, self).__init__(name, description, **kwargs)
 
 
 class Knowledge(Ability):
-    expectedattributes = ['name', 'description', 'basevalue', 'value', 'specialties']
-
+    expectedattributes = ['name', 'description', 'basevalue', 'value',
+                            'specialties', 'unskilled modifier']
+    unskilled_modifier = -3
     def __init__(self, name, description, **kwargs):
         super(Knowledge, self).__init__(name, description, **kwargs)
 
@@ -71,26 +77,6 @@ class Mage:
 
     def set(self, attribute, value): self.__setattr__(attribute, value)
     def get(self, attribute): return self.__getattribute__(attribute)
-
-def setgrouptovalue(g, v):
-    counter = 1
-    for a in g:
-        temp = g.__getitem__(a)
-        temp.__setattr__('value', v)
-        temp.__setattr__('ordinance', counter)
-        counter = counter + 1
-
-
-def setgrouptotuple(g, t):
-    counter = 0
-    for a in g:
-        temp = g.__getitem__(a)
-        temp.__setattr__('value', t[counter])
-        counter = counter + 1
-
-
-def getvaluesfor(g):
-    pass
 
 def choose(selections, allowed=4):
     # first we print the options with the index to use as a selector
@@ -139,20 +125,6 @@ def choose(selections, allowed=4):
             return fact
 
 
-def confirm(query):
-    print(query)
-    responses = ['no', 'yes']
-    response = choose(responses)
-    if response == 1:
-        return True
-    else:
-        return False
-
-
-def globalname(xx):
-    for objname, oid in globals().items():
-        if oid is xx:
-            return objname
 def check(input, acceptable_range):
     pass
     # if input in acceptable_range: 0
@@ -305,6 +277,7 @@ def test():
             i = g.__getitem__(e)
             print(i.__getattribute__('name'), end=':')
             print(i.__getattribute__('value'))
+    return mage
 
 
 if __name__ == '__main__':
@@ -326,3 +299,39 @@ if __name__ == '__main__':
     jumplength =
     jump = (jumpheight, jumplength)
 """
+
+def setgrouptovalue(g, v):
+    counter = 1
+    for a in g:
+        temp = g.__getitem__(a)
+        temp.__setattr__('value', v)
+        temp.__setattr__('ordinance', counter)
+        counter = counter + 1
+
+
+def setgrouptotuple(g, t):
+    counter = 0
+    for a in g:
+        temp = g.__getitem__(a)
+        temp.__setattr__('value', t[counter])
+        counter = counter + 1
+
+
+def getvaluesfor(g):
+    pass
+
+
+def confirm(query):
+    print(query)
+    responses = ['no', 'yes']
+    response = choose(responses)
+    if response == 1:
+        return True
+    else:
+        return False
+
+
+def globalname(xx):
+    for objname, oid in globals().items():
+        if oid is xx:
+            return objname
