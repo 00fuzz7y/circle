@@ -6,6 +6,15 @@ import pickle as pi
 class User(dict):
     pass
 
+class Character:
+    pass
+
+class Background:
+    pass
+
+class System:
+    pass
+
 class Stat(dict):
     expectedattributes = ['name', 'description']
 
@@ -413,10 +422,6 @@ def refine_character(char, points):
 
     refined_character = char
     return refined_character
-
-def jar(o, file):
-    # we need to take the important data from the character
-    pass
 
 def choose(query, choices, attempts=0, attempts_allowed=4):
     while attempts < attempts_allowed:

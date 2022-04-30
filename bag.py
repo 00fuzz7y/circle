@@ -16,7 +16,8 @@ class Bag:
             email, password, name, dataloc, created = line.strip().split(";")
             # load the data from it's file here
             # then you can place the data in the file here.
-            self.users[email] = (password, name, dataloc, created, saved, data)
+            self.users[email] = (password, name, dataloc, created)
+            # self.users[email] = (password, name, dataloc, created, saved, data)
         self.file.close()
 
 
