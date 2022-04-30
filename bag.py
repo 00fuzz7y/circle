@@ -1,5 +1,5 @@
-import datetime, pickle
-
+import datetime
+from pathlib import Path
 
 class Bag:
     def __init__(self, filename):
@@ -13,10 +13,21 @@ class Bag:
         self.users = {}
 
         for line in self.file:
-            email, password, name, created = line.strip().split(";")
-            self.users[email] = (password, name, created)
-
+            email, password, name, dataloc, created = line.strip().split(";")
+            # load the data from it's file here
+            # then you can place the data in the file here.
+            self.users[email] = (password, name, dataloc, created, saved, data)
         self.file.close()
+
+
+    def load_data(self, dataloc):
+        pass
+        # we need to open the data
+        # add the data to the user
+        # close the file. FOR SAFETY!
+
+    def save_data(self, user):
+        pass
 
     def get_user(self, email):
         if email in self.users:
@@ -24,9 +35,23 @@ class Bag:
         else:
             return -1
 
+    def rm_char(self, s, ss):
+        if ss in s:
+            blank = ''
+            s = s.replace(ss, blank)
+            print(s)
+            return s
+        else:
+            return s
+
     def add_user(self, email, password, name):
         if email.strip() not in self.users:
-            self.users[email.strip()] = (password.strip(), name.strip(), Bag.get_date())
+            dataloc = email
+            dataloc = self.rm_char(dataloc, '@')
+            dataloc = self.rm_char(dataloc, '.')
+            d = self.get_folder(dataloc)
+            self.users[email.strip()] = (password.strip(),
+            name.strip(), dataloc.strip(), Bag.get_date())
             self.save()
             return 1
         else:
@@ -39,30 +64,55 @@ class Bag:
         else:
             return False
 
+    def get_folder(self, f):
+        current_location = Path.cwd()
+        f = current_location / f
+        found = False
+        for x in current_location.iterdir():
+            if x.is_dir():
+                if x == f:
+                    print('aha!')
+                    return f
+                else:
+                    print("{} is not my folder".format(x))
+            else:
+                print('{} is not a folder'.format(x))
+        print('prolly should make that up!!')
+        f = self.make_new_folder(f)
+        return f
+
+    def make_new_folder(self, f):
+        current_location = Path.cwd()
+        f = current_location / f
+        Path.mkdir(f)
+        return f
+
     def save(self):
+        d8 = datetime.datetime.strftime(datetime.datetime.now(),"%m/%d-%H:%M%S")
+
+        for user in self.users:
+            dl = str(users[user][3])
+            p = Path.cwd()
+            p = p / dl
+
+
+    # should probably save the data first, then you can save where it is.
         with open(self.filename, 'w') as f:
             for user in self.users:
-                f.write(user + ";" + self.users[user][0] + ";" + self.users[user][1] + ";" + self.users[user][2] + "\n")
+                f.write(user + ";" +
+                    self.users[user][0] + ";" +
+                    self.users[user][1] + ";" +
+                    self.users[user][2] + ";" +
+                    self.users[user][3] + "\n")
 
-
+        # for user in self.users:
+        #     locay =
+        #     with open()
 
     @staticmethod
     def get_date():
         return str(datetime.datetime.now()).split(" ")[0]
 
-    def bagit(o, filename='bag'):
-        here = filename
-        heret = str(filename + '.txt')
-        with open(here, 'wb') as f:
-            with open(heret, 'w') as tf:
-                for e in meeji:
-                    for y, z in e.items():
-                        tf.write(y+ ';')
-                        pickle.dump(z,f)
-
-    def bagitin(o):
-        fn = input("a name for your bag:")
-        bagit(o, fn)
 
 if '__name__'== '__main__':
     fn = input("a name for your bag:")

@@ -1,13 +1,3 @@
-"""kivy wouldn't initialise without these.
-    seeing if environment fixed [it wasn't, but the config stuck]
-from kivy import Config
-Config.set('graphics', 'multisamples', '0')
-import os
-os.environ['KIVY_GL_BACKEND'] = 'angle_sdl2'
-
-this is going to be the UI once i can get the backend running
-"""
-
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
@@ -74,16 +64,18 @@ class MainWindow(Screen):
     n = ObjectProperty(None)
     created = ObjectProperty(None)
     email = ObjectProperty(None)
+    dataloc = ObjectProperty(None)
     current = ""
 
     def logOut(self):
         sm.current = "login"
 
     def on_enter(self, *args):
-        password, name, created = db.get_user(self.current)
+        password, name, dataloc, created = db.get_user(self.current)
         self.n.text = "Account Name: " + name
         self.email.text = "Email: " + self.current
         self.created.text = "Created On: " + created
+        self.dataloc.text = "data saved in: " + dataloc
 
 
 class WindowManager(ScreenManager):
