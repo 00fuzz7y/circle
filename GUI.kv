@@ -117,7 +117,7 @@
             font_size: (root.width**2 + root.height**2) / 13**4
             text: "Login"
             on_release:
-                root.manager.transition.direction = "up"
+                root.manager.transition.direction = "down"
                 root.loginBtn()
 
         Button:
@@ -126,45 +126,107 @@
             font_size: (root.width**2 + root.height**2) / 17**4
             text: "Don't have an Account? Create One"
             on_release:
-                root.manager.transition.direction = "right"
+                root.manager.transition.direction = "left"
                 root.createBtn()
 
 
-<MainWindow>:
+<UserWindow>:
     n: n
     email: email
     created:created
     dataloc:dataloc
 
     FloatLayout:
-        Label:
-            id: n
-            pos_hint:{"x": 0.1, "top":0.9}
-            size_hint:0.8, 0.2
-            text: "Account Name: "
+        cols:1
 
-        Label:
-            id: email
-            pos_hint:{"x": 0.1, "top":0.8}
-            size_hint:0.8, 0.2
-            text: "Email: "
+        FloatLayout:
 
-        Label:
-            id: created
-            pos_hint:{"x": 0.1, "top":0.7}
-            size_hint:0.8, 0.2
-            text: "Created: "
+            size: root.width, root.height/2
 
-        Label:
-            id: dataloc
-            pos_hint:{"x": 0.1, "top":0.6}
-            size_hint:0.8, 0.2
-            text: "Data saved in: "
+            Label:
+                id: n
+                pos_hint:{"x": 0.1, "top":0.9}
+                size_hint:0.8, 0.2
+                text: "Account Name: "
+
+            Label:
+                id: email
+                pos_hint:{"x": 0.1, "top":0.8}
+                size_hint:0.8, 0.2
+                text: "Email: "
+
+            Label:
+                id: created
+                pos_hint:{"x": 0.1, "top":0.7}
+                size_hint:0.8, 0.2
+                text: "Created: "
+
+            Label:
+                id: dataloc
+                pos_hint:{"x": 0.1, "top":0.6}
+                size_hint:0.8, 0.2
+                text: "Data saved in: "
 
         Button:
             pos_hint:{"x":0.2, "y": 0.1}
-            size_hint:0.4,0.2
+            size_hint:0.4,0.1
+            font_size: (root.width**2 + root.height**2) / 17**4
             text: "Log Out"
             on_release:
                 app.root.current = "login"
+                root.manager.transition.direction = "up"
+
+        Button:
+            pos_hint:{"x":0.6,"y":0.05}
+            size_hint: 0.4, 0.15
+            text: "Mah Thingz Plz"
+            font_size: (root.width**2 + root.height**2) / 14**4
+            on_release:
                 root.manager.transition.direction = "down"
+                root.mahThingz()
+
+<ThingzWindow>:
+    n: n
+    dataloc: dataloc
+    thingz: thingz
+    FloatLayout:
+        cols:1
+
+        FloatLayout:
+
+            size: root.width, root.height/2
+            Label:
+                id: n
+                pos_hint:{"x": 0.1, "top":0.9}
+                size_hint:0.8, 0.2
+                text: "Account Name: "
+
+            Label:
+                id: dataloc
+                pos_hint:{"x": 0.1, "top":0.8}
+                size_hint:0.8, 0.2
+                text: "Data stored in : "
+
+            Label:
+                id: thingz
+                pos_hint:{"x": 0.1, "top":0.7}
+                size_hint:0.8, 0.2
+                text: "Thingz: "
+
+        Button:
+            pos_hint:{"x":0.2, "y": 0.1}
+            size_hint:0.4,0.1
+            font_size: (root.width**2 + root.height**2) / 17**4
+            text: "Log Out"
+            on_release:
+                app.root.current = "login"
+                root.manager.transition.direction = "up"
+
+        Button:
+            pos_hint:{"x":0.6,"y":0.05}
+            size_hint: 0.4, 0.15
+            text: "Check me out!"
+            font_size: (root.width**2 + root.height**2) / 14**4
+            on_release:
+                root.manager.transition.direction = "down"
+                root.checkUser()

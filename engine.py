@@ -22,3 +22,7 @@ functions used by this:
     save(char) saves character to file(char.name)
 """
 # i think this needs to be a template engine
+
+# the smart thing to do would be to output the files we need
+
+# dynamically linking them so we don't have to worry if they are
