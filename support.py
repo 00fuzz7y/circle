@@ -11,13 +11,16 @@ designed to ease the experience of GMing
       update()
       delete()
 
+System
+RPG
+OWOD
 Mage the Ascension
 
 Name: Aodh
 Player: Genie
 Chronicle: Recumbent
 Essence:Dynamic/Pattern/Primordial/Questing
-Mature:
+Nature:
 Demeanor:
 Tradition:Sons of Aether
 Mentor:

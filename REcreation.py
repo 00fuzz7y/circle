@@ -3,10 +3,16 @@ from pathlib import Path as P
 import datetime as dt
 import pickle as pi
 
+class System():
+    pass
+
+class Mechanic():
+    pass
+
 class Stat(dict):
     expectedattributes = ['name', 'description']
 
-    def __init__(self, name='something', description='basic', **kwargs):
+    def __init__(self, name, description, **kwargs):
         self.name = name
         self.description = description
         for k in kwargs.keys():
@@ -20,7 +26,7 @@ class Stat(dict):
             expected.append((ea, self.__getattribute__(ea)))
         return expected
     def repr(self):
-        r = ":"
+        r = "="
         la = self.listattributes()
         na = []
         for a in la:
@@ -28,22 +34,90 @@ class Stat(dict):
         r = r.join(na)
         return r
 
+class StatGroup(dict):
+    expectedattributes = ['name']
+
+    def __init__(self, name, **kwargs):
+        self.name = name
+        for k in kwargs.keys():
+            self.__setattr__(k, kwargs[k])
+
+
+    def set(self, attribute, value):self.__setattr__(attribute, value)
+    def get(self, attribute): return self.__getattribute__(attribute)
+    def listattributes(self):
+        expected = []
+        for ea in self.expectedattributes:
+            if isinstance(self.get(ea), Stat) or isinstance(self.get(ea), StatGroup):
+                temp = self.get(ea)
+                expected.append((ea, temp.listattributes()))
+            else:
+                expected.append((ea, self.__getattribute__(ea)))
+        return expected
+
+    def repr(self):
+        r = "="
+        la = self.listattributes()
+        r = str(la)
+        return r
+
 class Attribute(Stat):
     expectedattributes = ['name', 'description', 'value', 'basevalue']
     basevalue = 1
 
     def __init__(self, name, description, **kwargs):
-        super(Attribute, self).__init__(name, description, **kwargs)
-        self.value = self.basevalue
+        self.value = None
+        super().__init__(name, description, **kwargs)
+        if self.value is None:
+            self.value = self.basevalue
+
+class Domain(StatGroup):
+    expectedattributes = ['name', 'description', 'priority']
+    def __init__(self, name, **kwargs):
+        super().__init__(name, **kwargs)
+        self.priority = None
+
+class Physical(Domain):
+    expectedattributes = ['name', 'description', 'priority',
+                            'Strength', 'Dexterity', 'Stamina']
+
+    def __init__(self, name, descr, **kwargs):
+        super().__init__(name, **kwargs)
+        self.description = descr
+
+class Mental(Domain):
+    expectedattributes = ['name', 'description', 'priority',
+                            'Perception', 'Intelligence', 'Wits']
+
+    def __init__(self, name, descr, **kwargs):
+        super().__init__(name, **kwargs)
+        self.description = descr
+
+class Social(Domain):
+    expectedattributes = ['name', 'description', 'priority',
+                            'Charisma', 'Manipulation', 'Appearance']
+
+    def __init__(self, name, descr, **kwargs):
+        super().__init__(name, **kwargs)
+        self.description = descr
+
+class Attributes(StatGroup):
+    expectedattributes = ['name', 'description', 'Physical', 'Mental', 'Social']
+
+    def __init__(self, name, descr, **kwargs):
+        super().__init__(name, **kwargs)
+        self.description = descr
 
 class Ability(Stat):
-    expectedattributes = ['name', 'description', 'value', 'basevalue' ,
+    expectedattributes = ['name', 'description', 'value', 'basevalue',
                             'specialties', 'unskilled_modifier']
     basevalue = 0
 
     def __init__(self, name, description, **kwargs):
-        super(Ability, self).__init__(name, description, **kwargs)
-        self.value = self.basevalue
+        self.value = None
+        super().__init__(name, description, **kwargs)
+        if self.value is None:
+            self.value = self.basevalue
         self.specialties = []
 
 class Skill(Ability):
@@ -52,7 +126,7 @@ class Skill(Ability):
     unskilled_modifier = -1
 
     def __init__(self, name, description, **kwargs):
-        super(Skill, self).__init__(name, description, **kwargs)
+        super().__init__(name, description, **kwargs)
 
 class Talent(Ability):
     expectedattributes = ['name', 'description', 'value', 'basevalue' ,
@@ -60,53 +134,118 @@ class Talent(Ability):
     unskilled_modifier = -1
 
     def __init__(self, name, description, **kwargs):
-        super(Talent, self).__init__(name, description, **kwargs)
+        super().__init__(name, description, **kwargs)
 
 class Knowledge(Ability):
     expectedattributes = ['name', 'description', 'value', 'basevalue' ,
                             'specialties', 'unskilled_modifier']
     unskilled_modifier = -3
     def __init__(self, name, description, **kwargs):
-        super(Knowledge, self).__init__(name, description, **kwargs)
+        super().__init__(name, description, **kwargs)
 
-# this should probably be contained in a class extension
-def get_attributes():
+class Talents(Domain):
+    expectedattributes = ['name', 'description', 'priority',
+                'Athletics', 'Awareness', 'Brawl', 'Dodge',
+                'Expression', 'Instruction', 'Intuition',
+                'Intimidation', 'Streetwise', 'Subterfuge']
+
+    def __init__(self, name, descr, **kwargs):
+        super().__init__(name, **kwargs)
+        self.description = descr
+
+class Skills(Domain):
+    expectedattributes = ['name', 'description', 'priority',
+                'Do', 'Drive', 'Etiquette', 'Firearms',
+                'Leadership', 'Meditation', 'Melee', 'Research',
+                'Stealth', 'Survival', 'Technology']
+
+    def __init__(self, name, descr, **kwargs):
+        super().__init__(name, **kwargs)
+        self.description = descr
+
+class Knowledges(Domain):
+    expectedattributes = ['name', 'description', 'priority',
+                    'Computer', 'Cosmology', 'Culture',
+                    'Enigmas', 'Investigation', 'Law', 'Linguistics',
+                    'Lore', 'Medicine', 'Occult', 'Science']
+
+    def __init__(self, name, descr, **kwargs):
+        super().__init__(name, **kwargs)
+        self.description = descr
+
+class Abilities(StatGroup):
+    expectedattributes = ['name', 'Talents', 'Skills', 'Knowledges']
+
+    def __init__(self, name, descr, **kwargs):
+        super().__init__(name, **kwargs)
+        self.description = descr
+
+class Character(StatGroup):
+    expectedattributes = ['name', 'Attributes', 'Abilities']
+
+    def __init__(self, name, **kwargs):
+        super().__init__(name, **kwargs)
+        self.Attributes = get_attributes()
+        self.Abilities = get_abilities()
+
+    def mirror(self, attr, depth=0):
+        # print character representation-should be recursive but can't sus it rn
+        spaCHEH = "  "
+        ea = attr.expectedattributes
+        for each in ea:
+            gap = spaCHEH * depth
+            if isinstance(self.each, StatGroup):
+                # we must go deeper
+                depth += 1
+                mirror(self.a, depth)
+
+                # return from the depths
+                depth -= 1
+            elif isinstance(self.get(a), Stat):
+                print("{}{}".format(gap, self.get(each).listattributes()))
+                continue
+            else:
+                print(each, self.each)
+
+# still need to get this ^ up into Character there
+def get_attributes(TUP = None):
     # let's get physical, physical
-    strength = Attribute(name='strength', description='raw force power', affects='p')
-    dexterity = Attribute(name='dexterity', description='finesse and reaction', affects='p')
-    stamina = Attribute(name='stamina', description='withstand and endure', affects='p')
+    strength = Attribute('Strength', 'raw force power')
+    dexterity = Attribute('Dexterity', 'finesse and reaction')
+    stamina = Attribute('Stamina', 'withstand and endure')
 
     # I might be mental
-    perception = Attribute(name='perception', description='aware and attentive', affects='m')
-    intelligence = Attribute(name='intelligence', description='reliably recall', affects='m')
-    wits = Attribute(name='wits', description='serene in focus', affects='m')
+    perception = Attribute(name='Perception', description='aware and attentive', affects='m')
+    intelligence = Attribute(name='Intelligence', description='reliably recall', affects='m')
+    wits = Attribute(name='Wits', description='serene in focus', affects='m')
 
     # social
-    charisma = Attribute(name='charisma', description='presence and impression', affects='s')
-    manipulation = Attribute(name='manipulation', description='convince and coerce', affects='s')
-    appearance = Attribute(name='appearance', description='poise and composure', affects='s')
+    charisma = Attribute(name='Charisma', description='presence and impression', affects='s')
+    manipulation = Attribute(name='Manipulation', description='convince and coerce', affects='s')
+    appearance = Attribute(name='Appearance', description='poise and composure', affects='s')
 
-    physical={'name':'physical'}
-    physical.__setitem__(strength.name, strength)
-    physical.__setitem__(dexterity.name, dexterity)
-    physical.__setitem__(stamina.name, stamina)
-
-    mental = {'name': 'mental'}
-    mental.__setitem__(perception.name, perception)
-    mental.__setitem__(intelligence.name, intelligence)
-    mental.__setitem__(wits.name, wits)
+    physical = Physical('Physical', descr='material influence')
+    physical.Strength = strength
+    physical.Dexterity = dexterity
+    physical.Stamina = stamina
 
 
-    social = {'name': 'social'}
-    social.__setitem__(charisma.name, charisma)
-    social.__setitem__(manipulation.name, manipulation)
-    social.__setitem__(appearance.name, appearance)
+    mental = Mental('Mental', 'brainpower')
+    mental.Perception = perception
+    mental.Intelligence = intelligence
+    mental.Wits = wits
+
+
+    social = Social('Social', 'relationship with relationships')
+    social.Charisma = charisma
+    social.Manipulation = manipulation
+    social.Appearance = appearance
 
     #become a whole person
-    attributes={'name':'attributes'}
-    attributes.__setitem__(physical['name'], physical)
-    attributes.__setitem__(mental['name'], mental)
-    attributes.__setitem__(social['name'], social)
+    attributes=Attributes('Attributes','characteristics of the person')
+    attributes.Physical = physical
+    attributes.Mental = mental
+    attributes.Social = social
 
     # get it out
     return attributes
@@ -114,92 +253,92 @@ def get_attributes():
 def get_talents():
 
     # I'm just talented, I guess
-    alertness = Talent(name='alertness', description="attention to one's environment")
-    athletics = Talent(name='athletics', description='traverse unsafe terrain')
-    awareness = Talent(name='awareness', description='attention to spiritual disurbance')
-    brawl = Talent(name='brawl', description='hand-to-hand combat')
-    dodge = Talent(name='dodge', description='avoid a threat or move between cover')
-    expression = Talent(name='expression', description='effectiveness of self-communication')
-    instruction = Talent(name='instruction', description='pass on a skill you understand')
-    intuition = Talent(name='intuition', description='your gut can save your butt')
-    intimidation = Talent(name='intimidation', description='threaten to your own benefit')
-    streetwise = Talent(name='streetwise', description='you know how to run the streets')
-    subterfuge = Talent(name='subterfuge', description='communicate covertly')
+    alertness = Talent('Alertness', "attention to one's environment")
+    athletics = Talent('Athletics', 'traverse unsafe terrain')
+    awareness = Talent('Awareness', 'attention to spiritual disurbance')
+    brawl = Talent('Brawl', 'hand-to-hand combat')
+    dodge = Talent('Dodge', 'avoid a threat or move between cover')
+    expression = Talent('Expression', 'effectiveness of self-communication')
+    instruction = Talent('Instruction', 'pass on a skill you understand')
+    intuition = Talent('Intuition', 'your gut can save your butt')
+    intimidation = Talent('Intimidation', 'threaten to your own benefit')
+    streetwise = Talent('Streetwise', 'you know how to run the streets')
+    subterfuge = Talent('Subterfuge', 'communicate covertly')
 
     # Steven Stills
-    talents = {'name': 'talents'}
-    talents.__setitem__(alertness.name, alertness)
-    talents.__setitem__(athletics.name, athletics)
-    talents.__setitem__(awareness.name, awareness)
-    talents.__setitem__(brawl.name, brawl)
-    talents.__setitem__(dodge.name, dodge)
-    talents.__setitem__(expression.name, expression)
-    talents.__setitem__(instruction.name, instruction)
-    talents.__setitem__(intuition.name, intuition)
-    talents.__setitem__(intimidation.name, intimidation)
-    talents.__setitem__(streetwise.name, streetwise)
-    talents.__setitem__(subterfuge.name, subterfuge)
+    talents = Talents('Talents', 'Inherent Aptitude')
+    talents.Alertness = alertness
+    talents.Athletics = athletics
+    talents.Awareness = awareness
+    talents.Brawl = brawl
+    talents.Dodge = dodge
+    talents.Expression = expression
+    talents.Instruction = instruction
+    talents.Intuition = intuition
+    talents.Intimidation = intimidation
+    talents.Streetwise = streetwise
+    talents.Subterfuge = subterfuge
 
     return talents
 
 def get_skills():
 
     #KICKIT
-    do = Skill(name='do', description='the way')
-    drive = Skill(name='drive', description='operate a vehicle')
-    etiquette = Skill(name='etiquette', description='social niceties')
-    firearms = Skill(name='firearms', description='ballistic weaponry')
-    leadership = Skill(name='leadership', description='inspire to action')
-    meditation = Skill(name='meditation', description='cool under fire')
-    melee = Skill(name='melee', description='HIT THE THING WITH THE OTHER THING')
-    research = Skill(name='research', description='its somewhere in these stacks')
-    stealth = Skill(name='stealth', description='avoid detection')
-    survival = Skill(name='survival', description='find basic necessities')
-    technology = Skill(name='technology', description='operate technology')
+    do = Skill('Do', 'the way')
+    drive = Skill('Drive', 'operate a vehicle')
+    etiquette = Skill('Etiquette', 'social niceties')
+    firearms = Skill('Firearms', 'ballistic weaponry')
+    leadership = Skill('Leadership', 'inspire to action')
+    meditation = Skill('Meditation', 'cool under fire')
+    melee = Skill('Melee', 'HIT THE THING WITH THE OTHER THING')
+    research = Skill('Research', 'its somewhere in these stacks')
+    stealth = Skill('Stealth', 'avoid detection')
+    survival = Skill('Survival', 'find basic necessities')
+    technology = Skill('Technology', 'operate technology')
 
     # SKEEEYULZ
-    skills = {'name': 'skills'}
-    skills.__setitem__(do.name, do)
-    skills.__setitem__(drive.name, drive)
-    skills.__setitem__(etiquette.name, etiquette)
-    skills.__setitem__(firearms.name, firearms)
-    skills.__setitem__(leadership.name, leadership)
-    skills.__setitem__(meditation.name, meditation)
-    skills.__setitem__(melee.name, melee)
-    skills.__setitem__(research.name, research)
-    skills.__setitem__(stealth.name, stealth)
-    skills.__setitem__(survival.name, survival)
-    skills.__setitem__(technology.name, technology)
+    skills = Skills('Skills', 'Practiced in Preparation')
+    skills.Do = do
+    skills.Drive = drive
+    skills.Etiquette = etiquette
+    skills.Firearms = firearms
+    skills.Leadership = leadership
+    skills.Meditation = meditation
+    skills.Melee = melee
+    skills.Research = research
+    skills.Stealth = stealth
+    skills.Survival = survival
+    skills.Technology = technology
 
     #THANKYOU
     return skills
 
 def get_knowledges():
-    computer = Knowledge(name='computer', description='information processing and code')
-    cosmology = Knowledge(name='cosmology', description='the universe and its motions')
-    culture = Knowledge(name='culture', description='both specific and the construct')
-    enigmas = Knowledge(name='enigmas', description='separated and seemingly unrelated')
-    investigation = Knowledge(name='investigation', description='find it out')
-    law = Knowledge(name='law', description='intimacy with and the practice of')
-    linguistics = Knowledge(name='linguistics', description='languages')
-    lore = Knowledge(name='lore', description='through story')
-    medicine = Knowledge(name='medicine', description='bodily functions and their repair')
-    occult = Knowledge(name='occult', description='traditional new-age black magicks')
-    science = Knowledge(name='science', description='theories of the known universe')
+    computer = Knowledge('Computer', 'information processing and code')
+    cosmology = Knowledge('Cosmology', 'the universe and its motions')
+    culture = Knowledge('Culture', 'both specific and the construct')
+    enigmas = Knowledge('Enigmas', 'separated and seemingly unrelated')
+    investigation = Knowledge('Investigation', 'find it out')
+    law = Knowledge('Law', 'intimacy with and the practice of')
+    linguistics = Knowledge('Linguistics', 'languages')
+    lore = Knowledge('Lore', 'through story')
+    medicine = Knowledge('Medicine', 'bodily functions and their repair')
+    occult = Knowledge('Occult', 'traditional new-age black magicks')
+    science = Knowledge('Science', 'theories of the known universe')
 
 
-    knowledges = {'name': 'knowledges'}
-    knowledges.__setitem__(computer.name, computer)
-    knowledges.__setitem__(cosmology.name, cosmology)
-    knowledges.__setitem__(culture.name, culture)
-    knowledges.__setitem__(enigmas.name, enigmas)
-    knowledges.__setitem__(investigation.name, investigation)
-    knowledges.__setitem__(law.name, law)
-    knowledges.__setitem__(linguistics.name, linguistics)
-    knowledges.__setitem__(lore.name, lore)
-    knowledges.__setitem__(medicine.name, medicine)
-    knowledges.__setitem__(occult.name, occult)
-    knowledges.__setitem__(science.name, science)
+    knowledges = Knowledges('Knowledges', 'Studied Information')
+    knowledges.Computer = computer
+    knowledges.Cosmology = cosmology
+    knowledges.Culture = culture
+    knowledges.Enigmas = enigmas
+    knowledges.Investigation = investigation
+    knowledges.Law = law
+    knowledges.Linguistics = linguistics
+    knowledges.Lore = lore
+    knowledges.Medicine = medicine
+    knowledges.Occult = occult
+    knowledges.Science = science
 
     return knowledges
 
@@ -209,20 +348,20 @@ def get_abilities():
     skills = get_skills()
     knowledges = get_knowledges()
 
-    abilities = {'name': 'abilities'}
-    abilities.__setitem__(talents['name'], talents)
-    abilities.__setitem__(skills['name'], skills)
-    abilities.__setitem__(knowledges['name'], knowledges)
+    abilities = Abilities('Abilities', 'Proficient Action')
+    abilities.Talents = talents
+    abilities.Skills = skills
+    abilities.Knowledges = knowledges
 
     return abilities
 
 def get_character(name='character'):
-    character = {'name': name}
+    character = Character(name)
 
     attr = get_attributes()
-    character.__setitem__(attr['name'], attr)
+    character.Attributes = attr
     abilities = get_abilities()
-    character.__setitem__(abilities['name'], abilities)
+    character.Abilities = abilities
 
     if 'name' in character:
         print(character['name'])
@@ -260,22 +399,22 @@ knowledge= "Which Knowledge is getting points"                          #11
 
 choices = [ [name, "any sequence of characters will do for a name"],
             [done, ["yes", "no"]],
-            [aspect, ['attributes', 'abilities', 'backgrounds']],
+            [aspect, ['Attributes', 'Abilities', 'Backgrounds']],
             [priority, ["primary", "secondary", "tertiary"]],
-            [domain, ['physical', 'mental', 'social']],
-            [physical, ['strength', 'dexterity', 'stamina']],
-            [mental, ['perception', 'intelligence', 'wits']],
-            [social, ['charisma', 'manipulation', 'appearance']],
-            [abilities, ['talents', 'skills', 'knowledges']],
-            [talent, ['athletics', 'awareness', 'brawl', 'dodge',
-                        'expression', 'instruction', 'intuition',
-                        'intimidation', 'streetwise', 'subterfuge']],
-            [skill, ['do', 'drive', 'etiquette', 'firearms',
-                        'leadership', 'meditation', 'melee', 'research',
-                        'stealth', 'survival', 'technology']],
-            [knowledge, ['computer', 'cosmology', 'culture',
-                            'enigmas', 'investigation', 'law', 'linguistics',
-                            'lore', 'medicine', 'occult', 'science']]]
+            [domain, ['Physical', 'Mental', 'Social']],
+            [physical, ['Strength', 'Dexterity', 'Stamina']],
+            [mental, ['Perception', 'Intelligence', 'Wits']],
+            [social, ['Charisma', 'Manipulation', 'Appearance']],
+            [abilities, ['Talents', 'Skills', 'Knowledges']],
+            [talent, ['Athletics', 'Awareness', 'Brawl', 'Dodge',
+                        'Expression', 'Instruction', 'Intuition',
+                        'Intimidation', 'Streetwise', 'Subterfuge']],
+            [skill, ['Do', 'Drive', 'Etiquette', 'Firearms',
+                        'Leadership', 'Meditation', 'Melee', 'Research',
+                        'Stealth', 'Survival', 'Technology']],
+            [knowledge, ['Computer', 'Cosmology', 'Culture',
+                            'Enigmas', 'Investigation', 'Law', 'Linguistics',
+                            'Lore', 'Medicine', 'Occult', 'Science']]]
 
 def refine_character(char, points):
     done = False
@@ -303,9 +442,9 @@ def refine_character(char, points):
         group = choose(choices[choiceIndex][0], choices[choiceIndex][1])
         print("aspect: {}".format(group))
 
-        if group == 'attributes':  # points to attributes
+        if group == 'Attributes':  # points to attributes
             choiceIndex = 4
-        elif group == 'abilities':  # points to abilities
+        elif group == 'Abilities':  # points to abilities
             choiceIndex = 8
 
         # subgroup to allocate points to
@@ -326,7 +465,7 @@ def refine_character(char, points):
                 continue
         # we need to see if that priority was used
         # if it hasn't, set it and return the points
-        if group == 'attributes':
+        if group == 'Attributes':
             pri_index = 0
             ava_index = 1
 
@@ -344,13 +483,13 @@ def refine_character(char, points):
                 print('no points here')
 
             limits_at_creation = (1, 4)
-            if subgroup == 'physical':
+            if subgroup == 'Physical':
                 choiceIndex = 5
-            elif subgroup == 'mental':
+            elif subgroup == 'Mental':
                 choiceIndex = 6
-            elif subgroup == 'social':
+            elif subgroup == 'Social':
                 choiceIndex = 7
-        elif group == 'abilities':
+        elif group == 'Abilities':
             pri_index = 2
             ava_index = 3
             if subgroup in points[pri_index]:
@@ -367,11 +506,11 @@ def refine_character(char, points):
                 print('no points here')
 
             limits_at_creation = (0, 3)
-            if subgroup == 'talents':
+            if subgroup == 'Talents':
                 choiceIndex = 9
-            elif subgroup == 'skills':
+            elif subgroup == 'Skills':
                 choiceIndex = 10
-            elif subgroup == 'knowledges':
+            elif subgroup == 'Knowledges':
                 choiceIndex = 11
         else:
             print('what are me doing?')
@@ -448,25 +587,6 @@ def choose(query, choices, attempts=0, attempts_allowed=4):
             else:
                 print("{} is an invalid choice. You have {} attempts left.".format(i, attempts_left))
             choose(choices, attempts, attempts_allowed)
-            continue
-
-def mirror(attr, depth=0):
-    # print character representation-should be recursive but can't sus it rn
-    spaCHEH = "  "
-    for a in attr:
-        gap = spaCHEH * depth
-        if 'name' in attr[a]:
-            # we must go deeper
-            depth += 1
-            mirror(attr[a], depth)
-
-            # return from the depths
-            depth -= 1
-        elif a == 'name':
-            depth += 1
-            print("{}{}:".format(gap, attr[a]))
-        else:
-            print("{}{}".format(gap,attr[a].repr()))
             continue
 
 def get_depth(attr, stat, current_depth=None, stat_at=None):
