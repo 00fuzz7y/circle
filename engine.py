@@ -21,8 +21,13 @@ functions used by this:
     load(char) returns character from file
     save(char) saves character to file(char.name)
 """
-# i think this needs to be a template engine
 
-# the smart thing to do would be to output the files we need
+
+
+# i think this needs to be a template engine
+# what needs to be output needs to be able to be read by python/kivy
+
+
 
 # dynamically linking them so we don't have to worry if they are
+# probably use kv.Builder

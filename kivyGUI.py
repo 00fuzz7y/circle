@@ -1,11 +1,30 @@
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
-from kivy.properties import ObjectProperty
+from kivy.properties import ObjectProperty, ListProperty
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 from bag import Bag
 import REcreation as Rc
+from kivy.uix.textinput import TextInput
+
+# needs to be altered such that tab = next and enter will submit & next
+class TabTextInput(TextInput):
+
+    def __init__(self, *args, **kwargs):
+        self.next = kwargs.pop('next', None)
+        super(TabTextInput, self).__init__(*args, **kwargs)
+
+    def set_next(self, next):
+        self.next = next
+
+    def _keyboard_on_key_down(self, window, keycode, text, modifiers):
+        key, key_str = keycode
+        if key in (9, 13) and self.next is not None:
+            self.next.focus = True
+            self.next.select_all()
+        else:
+            super(TabTextInput, self)._keyboard_on_key_down(window, keycode, text, modifiers)
 
 class CreateAccountWindow(Screen):
     namae = ObjectProperty(None)
@@ -72,6 +91,7 @@ class UserWindow(Screen):
     created = ObjectProperty(None)
     email = ObjectProperty(None)
     dataloc = ObjectProperty(None)
+    data = ListProperty(None)
     current = ""
 
     # switch back to login window
@@ -86,7 +106,7 @@ class UserWindow(Screen):
 
     # runs when the window is loaded
     def on_enter(self, *args):
-        password, name, dataloc, created = db.get_user(self.current)
+        password, name, dataloc, created, data = db.get_user(self.current)
         self.n.text = "Account Name: " + name
         self.email.text = "Email: " + self.current
         self.created.text = "Created On: " + created
@@ -96,7 +116,7 @@ class UserWindow(Screen):
 class ThingzWindow(Screen):
     n = ObjectProperty(None)
     dataloc = ObjectProperty(None)
-    thingz = ObjectProperty(None)
+    # thingz = ListProperty(None)
     current = ""
 
     # move back to userinfo
@@ -109,12 +129,22 @@ class ThingzWindow(Screen):
         self.current = ""
         sm.current = "login"
 
+    def newThingz(self):
+        NewThingz.current = self.current
+        sm.current = "new"
+
     # runs when the window is loaded
     def on_enter(self, *args):
-        password, name, dataloc, created = db.get_user(self.current)
+        password, name, dataloc, created, data = db.get_user(self.current)
         self.n.text = "Account Name: " + name
         self.dataloc.text = "data saved in: " + dataloc
-        self.thingz.text = "thingz shall be displayed here"
+        # self.thingz.text = "thingz shall be displayed here"
+
+# make a new character through here, please.
+class NewThingz(Screen):
+
+    def create(self):
+        pass
 
 
 # Root widget to switch out our windows
@@ -147,7 +177,7 @@ db = Bag("users.txt")
 sm = WindowManager()
 # the screens to navigate between
 screens = [LoginWindow(name="login"), CreateAccountWindow(name="create"),
-    UserWindow(name="user"), ThingzWindow(name="thingz")]
+    UserWindow(name="user"), ThingzWindow(name="thingz"), NewThingz(name="new")]
 # add the screens to our App
 for screen in screens:
     sm.add_widget(screen)

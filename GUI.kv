@@ -75,7 +75,6 @@
                 root.manager.transition.direction = "left"
                 root.submit()
 
-
 <LoginWindow>:
     name: "login"
 
@@ -93,6 +92,7 @@
         TextInput:
             id: email
             font_size: (root.width**2 + root.height**2) / 13**4
+            write_tab: False
             multiline: False
             pos_hint: {"x": 0.45 , "top":0.9}
             size_hint: 0.4, 0.15
@@ -128,7 +128,6 @@
             on_release:
                 root.manager.transition.direction = "left"
                 root.createBtn()
-
 
 <UserWindow>:
     n: n
@@ -173,8 +172,9 @@
             font_size: (root.width**2 + root.height**2) / 17**4
             text: "Log Out"
             on_release:
-                app.root.current = "login"
                 root.manager.transition.direction = "up"
+                app.root.current = "login"
+
 
         Button:
             pos_hint:{"x":0.6,"y":0.05}
@@ -188,7 +188,7 @@
 <ThingzWindow>:
     n: n
     dataloc: dataloc
-    thingz: thingz
+    # thingz: thingz
     FloatLayout:
         cols:1
 
@@ -207,11 +207,16 @@
                 size_hint:0.8, 0.2
                 text: "Data stored in : "
 
-            Label:
-                id: thingz
-                pos_hint:{"x": 0.1, "top":0.7}
+            Button:
+                # from when this was but a lowly label
+                # id: thingz
+                pos_hint:{"x": 0.1, "top":0.6}
                 size_hint:0.8, 0.2
-                text: "Thingz: "
+                text: "New Thingz"
+                font_size: (root.width**2 + root.height**2) / 17**4
+                on_release:
+                    root.manager.transition.direction = "left"
+                    root.newThingz()
 
         Button:
             pos_hint:{"x":0.2, "y": 0.1}
@@ -224,9 +229,79 @@
 
         Button:
             pos_hint:{"x":0.6,"y":0.05}
-            size_hint: 0.4, 0.15
+            size_hint: 0.4, 0.1
             text: "Check me out!"
             font_size: (root.width**2 + root.height**2) / 14**4
             on_release:
                 root.manager.transition.direction = "down"
                 root.checkUser()
+
+<Txt@Label>:
+    text_size: self.size
+    halign: 'right'
+    size_hint_x: 0.2
+
+<In@TextInput>:
+    halign: 'center'
+    size_hint_x: 0.6
+
+<Add@Button>:
+    size_hint_x: 0.2
+
+<GetThingsFromUser@GridLayout>:
+    cols:3
+
+    # Add:
+    #     text: "Add"
+    #     on_release:
+
+<OurButtons@GridLayout>:
+    cols:3
+<NewThingz>:
+    GridLayout:
+        cols: 1
+        orientation: "tb-lr"
+        GetThingsFromUser:
+            Txt:
+                text: "yo mamma"
+            In:
+                text: "sum text here"
+            Add:
+                text: "yo mamma"
+            Txt:
+                text: "wHYYYYYY"
+            Txt:
+                text: "yo mamma"
+            Txt:
+                text: "wHYYYYYY"
+            Txt:
+                text: "yo mamma"
+            In:
+                text: "sum text here"
+            Add:
+                text: "yo mamma"
+            Txt:
+                text: "wHYYYYYY"
+            Txt:
+                text: "yo mamma"
+            Txt:
+                text: "wHYYYYYY"
+        OurButtons:
+            Button:
+                size_hint_x: 0.2
+                text: "Log Out"
+                on_release:
+                    app.root.current = "login"
+                    root.manager.transition.direction = "up"
+
+            Button:
+                size_hint_x: 0.3
+                text: "RANDOM"
+                # sets values to randint in range
+                on_release:
+
+            Button:
+                size_hint_x: 0.3
+                text: "SAVE??!"
+                # saves current data to userfile
+                on_release:

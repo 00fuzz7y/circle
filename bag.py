@@ -1,5 +1,6 @@
 import datetime
-from pathlib import Path
+from pathlib import Path as P
+import pickle as pi
 
 class Bag:
     def __init__(self, filename):
@@ -15,20 +16,35 @@ class Bag:
         for line in self.file:
             email, password, name, dataloc, created = line.strip().split(";")
             # load the data from it's file here
+            data = self.load_data(dataloc)
             # then you can place the data in the file here.
-            self.users[email] = (password, name, dataloc, created)
-            # self.users[email] = (password, name, dataloc, created, saved, data)
+            self.users[email] = (password, name, dataloc, created, data)
         self.file.close()
 
 
     def load_data(self, dataloc):
-        pass
-        # we need to open the data
-        # add the data to the user
-        # close the file. FOR SAFETY!
+        data = []
+        p = P.cwd()
+        p = p / dataloc
+        folder = self.get_folder(p)
+        for x in folder.iterdir():
+            if x.is_file():
+                with open(x, 'rb') as theThing:
+                    data.append(pi.load(theThing))
+        return data
 
     def save_data(self, user):
-        pass
+        dataloc = user[3]
+        p = Path.cwd()
+        p = p / dataloc
+        folder = self.get_folder(p)
+        data = user[5]
+        for d in data:
+            newfile = str(d.name)
+            newfile = p / newfile
+            with open(newfile, 'wb') as f:
+                pi.dump(d, f)
+            print("saved {} to {} for {}".format(d, p, user))
 
     def get_user(self, email):
         if email in self.users:
@@ -66,7 +82,7 @@ class Bag:
             return False
 
     def get_folder(self, f):
-        current_location = Path.cwd()
+        current_location = P.cwd()
         f = current_location / f
         found = False
         for x in current_location.iterdir():
@@ -83,19 +99,16 @@ class Bag:
         return f
 
     def make_new_folder(self, f):
-        current_location = Path.cwd()
+        current_location = P.cwd()
         f = current_location / f
-        Path.mkdir(f)
+        P.mkdir(f)
         return f
 
     def save(self):
         d8 = datetime.datetime.strftime(datetime.datetime.now(),"%m/%d-%H:%M%S")
 
         for user in self.users:
-            dl = str(users[user][3])
-            p = Path.cwd()
-            p = p / dl
-
+            save_data(user)
 
     # should probably save the data first, then you can save where it is.
         with open(self.filename, 'w') as f:
@@ -106,9 +119,6 @@ class Bag:
                     self.users[user][2] + ";" +
                     self.users[user][3] + "\n")
 
-        # for user in self.users:
-        #     locay =
-        #     with open()
 
     @staticmethod
     def get_date():
