@@ -1,5 +1,3 @@
-from kivy.app import App
-from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.properties import ObjectProperty, ListProperty
 from kivy.uix.popup import Popup
@@ -7,25 +5,9 @@ from kivy.uix.label import Label
 from bag import Bag
 import REcreation as Rc
 from kivy.uix.textinput import TextInput
-from screens import *
 
-# needs to be altered such that tab = next and enter will submit & next
-class TabTextInput(TextInput):
-
-    def __init__(self, *args, **kwargs):
-        self.next = kwargs.pop('next', None)
-        super(TabTextInput, self).__init__(*args, **kwargs)
-
-    def set_next(self, next):
-        self.next = next
-
-    def _keyboard_on_key_down(self, window, keycode, text, modifiers):
-        key, key_str = keycode
-        if key in (9, 13) and self.next is not None:
-            self.next.focus = True
-            self.next.select_all()
-        else:
-            super(TabTextInput, self)._keyboard_on_key_down(window, keycode, text, modifiers)
+def bindPlz(self, inst, val):
+    self.val = inst.val
 
 class CreateAccountWindow(Screen):
     namae = ObjectProperty(None)
@@ -71,6 +53,7 @@ class LoginWindow(Screen):
         if db.validate(self.email.text, self.password.text):
             # this passes the validated user to main
             UserWindow.current = self.email.text
+            print('wtf')
             self.reset()
             sm.current = "user"
         else:
@@ -108,10 +91,12 @@ class UserWindow(Screen):
     # runs when the window is loaded
     def on_enter(self, *args):
         password, name, dataloc, created, data = db.get_user(self.current)
-        self.n.text = "Account Name: " + name
-        self.email.text = "Email: " + self.current
-        self.created.text = "Created On: " + created
-        self.dataloc.text = "data saved in: " + dataloc
+        print("{} {} {} {}".format(password, name, dataloc, created))
+
+        self.n = "Account Name: " + name
+        self.email = "Email: " + self.current
+        self.created = "Created On: " + created
+        self.dataloc = "data saved in: " + dataloc
 
 # display things user has created; offer to create/edit, and move to logout
 class ThingzWindow(Screen):
@@ -147,68 +132,20 @@ class NewThingz(Screen):
     def create(self):
         pass
 
-
 # Root widget to switch out our windows
 class WindowManager(ScreenManager):
     pass
 
-
-# popup for mismatched login data
-def invalidLogin():
-    pop = Popup(title='Invalid Login',
-                  content=Label(text='Invalid username or password.'),
-                  size_hint=(None, None), size=(400, 400))
-    pop.open()
-
-# popup for invalid user input
-def invalidForm():
-    pop = Popup(title='Invalid Form',
-                  content=Label(text='Please fill in all inputs with valid information.'),
-                  size_hint=(None, None), size=(400, 400))
-    pop.open()
-
-def loadScreens():
-    pass
-
-# setting up our App environment with:
-# our stylesheet data
-kv = Builder.load_file("GUI.kv")
-# # Bag retrieves our users
+# Bag retrieves our users
 db = Bag("users.txt")
-
-# # a widget that shows our windows
+# a widget that shows our windows
 sm = WindowManager()
-# # the screens to navigate between
+# the screens to navigate between
 screens = [LoginWindow(name="login"), CreateAccountWindow(name="create"),
     UserWindow(name="user"), ThingzWindow(name="thingz"), NewThingz(name="new")]
-# # add the screens to our App
+# add the screens to our App
 for screen in screens:
     sm.add_widget(screen)
-#
-# # set our start screen
+
+# set our start screen
 sm.current = "login"
-
-
-# the containing class for our App
-class TableTopApp(App):
-    def build(self):
-        return sm
-
-# if this file is called, run TableTop
-if __name__ == "__main__":
-    #
-    # # Bag retrieves our users
-    # db = Bag("users.txt")
-    # a widget that shows our windows
-    sm = WindowManager()
-    # the screens to navigate between
-    screens = [LoginWindow(name="login"), CreateAccountWindow(name="create"),
-        UserWindow(name="user"), ThingzWindow(name="thingz"), NewThingz(name="new")]
-    # add the screens to our App
-    for screen in screens:
-        sm.add_widget(screen)
-
-    # set our start screen
-    sm.current = "login"
-
-    TableTopApp().run()
